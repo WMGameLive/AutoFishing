@@ -3,13 +3,14 @@ package wm.vdr.autofishing;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerFishEvent.State;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class Listeners implements Listener {
 
@@ -37,7 +38,16 @@ public class Listeners implements Listener {
     }
 
     private void doRightClick(Player player, InteractionHand hand) {
-        ServerPlayer serverPlayer = ((CraftPlayer) player).getHandle();
+        ServerPlayer serverPlayer = null;
+        try {
+            serverPlayer = (ServerPlayer) player.getClass().getMethod("getHandle").invoke(player);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
         serverPlayer.gameMode.useItem(serverPlayer, serverPlayer.getLevel(), serverPlayer.getItemInHand(hand), hand);
         serverPlayer.swing(hand, true);
     }
