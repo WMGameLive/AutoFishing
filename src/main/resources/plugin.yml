@@ -4,7 +4,15 @@ main: wm.vdr.autofishing.AutoFishing
 api-version: 1.18
 authors: [ WMGameLive ]
 description: Allows players to automatically fish.
+commands:
+  autofishing:
+    description: main command.
+    usage: /<command> <reload>
+    permission: autofishing.admin
 permissions:
   autofishing.use:
     description: Allow automatic fishing.
+    default: op
+  autofishing.admin:
+    description: Allow to use the command.
     default: op

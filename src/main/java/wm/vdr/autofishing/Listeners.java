@@ -32,7 +32,7 @@ public class Listeners implements Listener {
                     if(hand == null) return;
                     doRightClick(player, hand);
                 }
-            }.runTaskLater(main, e.getState() == State.BITE ? 5 : 20);
+            }.runTaskLater(main, e.getState() == State.BITE ? main.getConfig().getInt("Ticks_After_Bitten") : main.getConfig().getInt("Ticks_After_Caught"));
             return;
         }
     }
