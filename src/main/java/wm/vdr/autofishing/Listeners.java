@@ -41,13 +41,10 @@ public class Listeners implements Listener {
         ServerPlayer serverPlayer = null;
         try {
             serverPlayer = (ServerPlayer) player.getClass().getMethod("getHandle").invoke(player);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }
+
         serverPlayer.gameMode.useItem(serverPlayer, serverPlayer.getLevel(), serverPlayer.getItemInHand(hand), hand);
         serverPlayer.swing(hand, true);
     }
@@ -57,4 +54,5 @@ public class Listeners implements Listener {
                 InteractionHand.MAIN_HAND : player.getInventory().getItemInOffHand().getType().equals(Material.FISHING_ROD) ?
                 InteractionHand.OFF_HAND : null;
     }
+
 }
