@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
@@ -20,8 +21,57 @@ public class Executors implements CommandExecutor, TabCompleter {
             return false;
         }
         if(args[0].equalsIgnoreCase("reload")) {
+            if(!sender.hasPermission("autofishing.admin")) {
+                sender.sendMessage("§cYou do not have permission to do that!");
+                return true;
+            }
             main.reloadConfig();
-            sender.sendMessage("§aconfig.yml successfully reloaded.");
+            main.getPlayerDataUtil().reloadPlayerData();
+            sender.sendMessage("§aSuccessfully reloaded.");
+            return true;
+        }
+        if(args[0].equalsIgnoreCase("give")) {
+            if(!sender.hasPermission("autofishing.admin")) {
+                sender.sendMessage("§cYou do not have permission to do that!");
+                return true;
+            }
+            Player player;
+            if(args.length < 2) {
+                if(!(sender instanceof Player)) {
+                    sender.sendMessage("§cUsage: /autofishing give <Player>");
+                    return true;
+                }
+                player = (Player) sender;
+            }else {
+                player = main.getServer().getPlayer(args[1]);
+            }
+
+            if(player == null) {
+                sender.sendMessage("§cThe player does not exist.");
+                return true;
+            }
+
+            player.getInventory().addItem(main.getSpecificRod()).values().forEach(itemStack -> {
+                player.getWorld().dropItem(player.getLocation(), itemStack);
+            });
+
+            sender.sendMessage("§aGave the fishing rod to §e" + player.getName());
+            return true;
+        }
+        if(args[0].equalsIgnoreCase("toggle")) {
+            if(!(sender instanceof Player)) {
+                sender.sendMessage("§cOnly players can use this command!");
+                return true;
+            }
+            Player player = (Player) sender;
+            if(!player.hasPermission("autofishing.use")) {
+                player.sendMessage("§cYou do not have permission to do that!");
+                return true;
+            }
+            boolean auto = main.getPlayerDataUtil().isAuto(player.getUniqueId());
+            main.getPlayerDataUtil().setAuto(player.getUniqueId(), !auto);
+
+            player.sendMessage(auto ? "§eAuto-fishing is now disabled." : "§aAuto-fishing is now enabled.");
             return true;
         }
         return false;
@@ -32,10 +82,23 @@ public class Executors implements CommandExecutor, TabCompleter {
         final List<String> completions = new ArrayList<>();
         List<String> COMMANDS = new ArrayList<>();
         if(args.length == 1) {
-            COMMANDS.add("reload");
+            if(sender.hasPermission("autofishing.use")) {
+                COMMANDS.add("toggle");
+            }
+            if(sender.hasPermission("autofishing.admin")) {
+                COMMANDS.add("reload");
+                COMMANDS.add("give");
+            }
             StringUtil.copyPartialMatches(args[0], COMMANDS, completions);
             Collections.sort(completions);
             return completions;
+        }
+        if(args.length == 2) {
+            if(sender.hasPermission("autofishing.admin")) {
+                if(args[0].equalsIgnoreCase("give")) {
+                    return null;
+                }
+            }
         }
         return completions;
     }

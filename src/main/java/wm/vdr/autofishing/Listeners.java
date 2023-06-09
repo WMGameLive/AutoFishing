@@ -3,11 +3,14 @@ package wm.vdr.autofishing;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerFishEvent.State;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.InvocationTargetException;
@@ -23,6 +26,7 @@ public class Listeners implements Listener {
         Player player = e.getPlayer();
 
         if(!player.hasPermission("autofishing.use")) return;
+        if(!main.getPlayerDataUtil().isAuto(player.getUniqueId())) return;
 
         if(e.getState() == State.BITE || e.getState() == State.CAUGHT_FISH) {
             new BukkitRunnable() {
@@ -45,7 +49,12 @@ public class Listeners implements Listener {
             e.printStackTrace();
         }
 
-        serverPlayer.gameMode.useItem(serverPlayer, serverPlayer.getLevel(), serverPlayer.getItemInHand(hand), hand);
+        if(main.getConfig().getBoolean("Only_Specific_Rod.Enable")) {
+            ItemStack item = CraftItemStack.asBukkitCopy(serverPlayer.getItemInHand(hand));
+            if(!item.hasItemMeta() || !item.getItemMeta().getPersistentDataContainer().has(main.key, PersistentDataType.BOOLEAN)) return;
+        }
+
+        serverPlayer.gameMode.useItem(serverPlayer, serverPlayer.level(), serverPlayer.getItemInHand(hand), hand);
         serverPlayer.swing(hand, true);
     }
 
