@@ -9,7 +9,7 @@ Download on [Spigot](https://www.spigotmc.org/resources/100510/).
 
 ## Permissions
 ● autofishing.use - allow to automatically fish. (default: op)  
-● autofishing.admin - allow to use the command. (default: op)
+● autofishing.admin - allow to use give/reload command. (default: op)
 
 ## Configuration
 ```yaml
