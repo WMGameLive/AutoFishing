@@ -18,7 +18,17 @@ public class Executors implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(args.length == 0) {
-            return false;
+            String[] helpMessage = new String[]{
+                    "§7]§8----- §eAutoFishing §8-----§7[",
+                    "",
+                    "§a/autofishing toggle §7- §etoggle the auto fishing ability",
+                    "§a/autofishing give <player> §7- §egive the specific rod to someone",
+                    "§a/autofishing reload §7- §ereload the config file",
+                    "",
+                    "§7[§8-----------------------§7["
+            };
+            for (String helpMessageLine : helpMessage) sender.sendMessage(helpMessageLine);
+            return true;
         }
         if(args[0].equalsIgnoreCase("reload")) {
             if(!sender.hasPermission("autofishing.admin")) {
