@@ -1,0 +1,44 @@
+name: 'Bug Report'
+description: Report a bug.
+labels: [bug]
+body:
+  - type: input
+    id: plugin-version
+    attributes:
+      label: 'Plugin Version'
+      description: 'The version of the plugin. Do not type "Leatest".'
+    validations:
+      required: true
+
+  - type: input
+    id: server-version
+    attributes:
+      label: 'Server version'
+      description: 'The version of the server. You can copy the output of /version.'
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: check-list
+    attributes:
+      label: 'Check List'
+      description: ''
+      options:
+        - label: 'I’m sure that I’m using the correct versions of both the plugin and the server.'
+          required: true
+        - label: 'I’m sure that the plugin still encounters issues even when running whithout other plugins.'
+          required: true
+        - label: 'I'm sure I already gave the right permissions to the players who should have them.'
+          required: true
+
+  - type: textarea
+    id: issue
+    attributes:
+      label: 'What is the issue?'
+      description: ''
+      value: |
+        ```
+        
+        ```
+    validations:
+      required: false
