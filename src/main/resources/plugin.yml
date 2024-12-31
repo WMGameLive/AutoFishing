@@ -1,7 +1,7 @@
 name: AutoFishing
 version: '${project.version}'
 main: wm.vdr.autofishing.AutoFishing
-api-version: 1.18
+api-version: '1.21'
 authors: [ WMGameLive ]
 description: Allows players to automatically fish.
 commands:
