@@ -29,14 +29,15 @@ public class Listeners implements Listener {
         if(!main.getPlayerDataUtil().isAuto(player.getUniqueId())) return;
 
         if(e.getState() == State.BITE || e.getState() == State.CAUGHT_FISH) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    InteractionHand hand = getHand(player);
-                    if(hand == null) return;
-                    doRightClick(player, hand);
-                }
-            }.runTaskLater(main, e.getState() == State.BITE ? main.getConfig().getInt("Ticks_After_Bitten") : main.getConfig().getInt("Ticks_After_Caught"));
+            int delay = e.getState() == State.BITE ?
+                    main.getConfig().getInt("Ticks_After_Bitten") :
+                    main.getConfig().getInt("Ticks_After_Caught");
+
+            ServerTypeUtil.runAtPlayer(main, player, () -> {
+                InteractionHand hand = getHand(player);
+                if(hand == null) return;
+                doRightClick(player, hand);
+            }, delay);
             return;
         }
     }
