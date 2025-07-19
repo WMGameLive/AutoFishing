@@ -3,7 +3,7 @@ package wm.vdr.autofishing;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_21_R4.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_21_R5.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
